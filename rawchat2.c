@@ -20,12 +20,22 @@
 // #define MY_DEST_MAC5	0xFF
 
 // pi2 dc:a6:32:ac:86:df
-#define MY_DEST_MAC0	0xdc
-#define MY_DEST_MAC1	0xa6
-#define MY_DEST_MAC2	0x32
-#define MY_DEST_MAC3	0xac
-#define MY_DEST_MAC4	0x86
-#define MY_DEST_MAC5	0xdf
+//#define MY_DEST_MAC0	0xdc
+//#define MY_DEST_MAC1	0xa6
+//#define MY_DEST_MAC2	0x32
+//#define MY_DEST_MAC3	0xac
+//#define MY_DEST_MAC4	0x86
+//#define MY_DEST_MAC5	0xdf
+
+//_gateway (192.168.0.1) at 10:33:bf:19:2c:3c [ether] on enp2s0
+#define MY_DEST_MAC0	0x10
+#define MY_DEST_MAC1	0x33
+#define MY_DEST_MAC2	0xbf
+#define MY_DEST_MAC3	0x19
+#define MY_DEST_MAC4	0x2c
+#define MY_DEST_MAC5	0x3c
+
+
 
 // Checksum calculation function
 unsigned short checksum(void *b, int len) {
@@ -135,7 +145,7 @@ void send_raw_udp_packet(const char *source_ip, const char *dest_ip, int source_
     // IP checksum
     //iph->check = checksum((unsigned short *) packet, iph->tot_len);
     //iph->check = checksum((unsigned short *) packet, iph_total_len);
-    iph->check = htons(0x39F3);
+    iph->check = checksum( iph, sizeof(struct iphdr) );
 
     // UDP Header
     udph->source = htons(source_port);
