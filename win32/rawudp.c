@@ -212,12 +212,23 @@ int main(int argc, char* argv[]) {
 
     int psize = sizeof(struct pseudo_header) + sizeof(struct udphdr) + data_len;
     char* pseudogram = (char*)malloc(psize);
-    memcpy(pseudogram, &psh, sizeof(struct pseudo_header));
-    memcpy(pseudogram + sizeof(struct pseudo_header), &udph, sizeof(struct udphdr) + data_len);
+    memcpy(
+        pseudogram
+        , &psh
+        , sizeof(struct pseudo_header));
+    memcpy(
+        pseudogram + sizeof(struct pseudo_header)
+        , &udph
+        , sizeof(struct udphdr) );
+    memcpy(
+        pseudogram + sizeof(struct pseudo_header) + sizeof(struct udphdr)
+        , &data
+        , data_len);
 
     // UDP checksum calculation
-    //udph.check = checksum((unsigned short*)pseudogram, psize);
-    udph.check = 0;
+    udph.check = checksum((unsigned short*)pseudogram, psize);
+    //udph.check = 0;
+    printf("UDP checksum: 0x%04X\n", udph.check);
 
 
     // IP checksum calculation
